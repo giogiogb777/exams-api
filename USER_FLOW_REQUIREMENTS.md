@@ -12,6 +12,9 @@ username: jdoe pass: Aa123123
 username: jdoe_admin pass: Aa123123
 username: jdoe_moderator pass: Aa123123
 
+API_DOCS: 
+https://exams-api.up.railway.app/api/docs#/
+
 ---
 
 ## **Overview**
