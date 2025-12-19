@@ -160,13 +160,10 @@ export class ExamsService {
       throw new BadRequestException(`Exam with ID ${id} not found`);
     }
 
-    console.log('Before toggle - exam.isActive:', exam.isActive, 'type:', typeof exam.isActive);
-    // Toggle between 1 and 0
+    // Toggle between true and false
     exam.isActive = exam.isActive ? false : true;
-    console.log('After toggle - exam.isActive:', exam.isActive, 'type:', typeof exam.isActive);
     
     const updatedExam = await this.examsRepository.save(exam);
-    console.log('After save - updatedExam.isActive:', updatedExam.isActive, 'type:', typeof updatedExam.isActive);
     
     return {
       message: 'Exam active status toggled',

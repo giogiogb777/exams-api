@@ -126,6 +126,10 @@ export class ResultsController {
     description: 'Forbidden - Only Moderator or Admin can access this resource',
   })
   async deleteResult(@Param('id') id: string) {
-    return this.resultsService.deleteResult(Number(id));
+    const numId = Number(id);
+    if (isNaN(numId) || numId <= 0) {
+      throw new Error('Invalid result ID');
+    }
+    return this.resultsService.deleteResult(numId);
   }
 }

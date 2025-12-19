@@ -81,9 +81,7 @@ export class TestsController {
     description: 'Unauthorized - missing or invalid JWT token',
   })
   async getAllTests(@Query('isActive') isActive?: string): Promise<TestSummaryDto[]> {
-    console.log('Controller received isActive query param:', isActive);
     const activeFlag = isActive === 'true' ? true : isActive === 'false' ? false : undefined;
-    console.log('Converted to activeFlag:', activeFlag);
     return this.testsService.getAllTests(activeFlag);
   }
 
@@ -163,7 +161,11 @@ export class TestsController {
     },
   })
   async getTestById(@Param('id') id: string): Promise<TestDetailDto> {
-    return this.testsService.getTestById(Number(id));
+    const numId = Number(id);
+    if (isNaN(numId) || numId <= 0) {
+      throw new Error('Invalid test ID');
+    }
+    return this.testsService.getTestById(numId);
   }
 
   @Post(':id/submit')
@@ -279,8 +281,12 @@ export class TestsController {
     @Param('id') id: string,
     @Body() submitTestDto: SubmitTestDto,
   ): Promise<TestResultDto> {
+    const numId = Number(id);
+    if (isNaN(numId) || numId <= 0) {
+      throw new Error('Invalid exam ID');
+    }
     // Validate exam ID matches URL param
-    if (Number(id) !== submitTestDto.examId) {
+    if (numId !== submitTestDto.examId) {
       throw new Error('Exam ID mismatch');
     }
     return this.testsService.submitTest(user.id, submitTestDto);

@@ -122,7 +122,13 @@ export class AuthController {
   })
   async logout(@Request() req: any) {
     const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      throw new Error('Authorization header missing');
+    }
     const token = authHeader.split(' ')[1];
+    if (!token) {
+      throw new Error('Token missing');
+    }
     return this.authService.logout(token);
   }
 }

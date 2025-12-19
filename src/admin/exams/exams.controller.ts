@@ -277,7 +277,11 @@ export class ExamsController {
     description: 'Forbidden - Only SuperAdmin can access this resource',
   })
   async getExamById(@Param('id') id: string) {
-    return this.examsService.findById(Number(id));
+    const numId = Number(id);
+    if (isNaN(numId) || numId <= 0) {
+      throw new Error('Invalid exam ID');
+    }
+    return this.examsService.findById(numId);
   }
 
   @Put(':id')
@@ -331,7 +335,11 @@ export class ExamsController {
     description: 'Forbidden - Only SuperAdmin can update exams',
   })
   async updateExam(@Param('id') id: string, @Body() updateExamDto: any) {
-    return this.examsService.updateExam(Number(id), updateExamDto);
+    const numId = Number(id);
+    if (isNaN(numId) || numId <= 0) {
+      throw new Error('Invalid exam ID');
+    }
+    return this.examsService.updateExam(numId, updateExamDto);
   }
 
   @Delete(':id')
@@ -367,7 +375,11 @@ export class ExamsController {
     description: 'Forbidden - Only SuperAdmin can delete exams',
   })
   async deleteExam(@Param('id') id: string) {
-    return this.examsService.deleteExam(Number(id));
+    const numId = Number(id);
+    if (isNaN(numId) || numId <= 0) {
+      throw new Error('Invalid exam ID');
+    }
+    return this.examsService.deleteExam(numId);
   }
 
   @Patch(':id/toggle-active')
@@ -421,6 +433,10 @@ export class ExamsController {
     description: 'Forbidden - Only Moderator or Admin can toggle exam status',
   })
   async toggleExamActive(@Param('id') id: string) {
-    return this.examsService.toggleExamActive(Number(id));
+    const numId = Number(id);
+    if (isNaN(numId) || numId <= 0) {
+      throw new Error('Invalid exam ID');
+    }
+    return this.examsService.toggleExamActive(numId);
   }
 }
