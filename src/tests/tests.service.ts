@@ -16,16 +16,18 @@ export class TestsService {
   ) {}
 
   async getAllTests(active?: boolean): Promise<TestSummaryDto[]> {
-    const exams = await this.examsRepository.find();
+    console.log('getAllTests called with active:', active);
+    
+    let exams = await this.examsRepository.find();
+    console.log('All exams from DB:', exams.map(e => ({ id: e.id, name: e.examName, isActive: e.isActive })));
 
-    // Filter by active status if provided
-    let filtered = exams;
+    // Filter by active status if provided (isActive is stored as 1/0 in SQLite)
     if (active !== undefined) {
-      // For now, we'll consider all exams as active
-      // In future, add an 'isActive' field to Exam entity
+      exams = exams.filter(exam => !!exam.isActive === active);
+      console.log('Filtered exams:', exams.map(e => ({ id: e.id, name: e.examName, isActive: e.isActive })));
     }
-
-    return filtered.map((exam) => this.mapToTestSummary(exam));
+    
+    return exams.map((exam) => this.mapToTestSummary(exam));
   }
 
   async getTestById(id: number): Promise<TestDetailDto> {

@@ -38,7 +38,7 @@ export class Exam {
   @Column()
   difficulty: DifficultyEnum;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({ type: 'integer', default: 1 })
   isActive: boolean;
 
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })

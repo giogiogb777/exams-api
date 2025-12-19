@@ -4,15 +4,16 @@ import { ExamsService } from './exams.service';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { AdminGuard } from '../guards/super-admin.guard';
 import { ModeratorGuard } from '../guards/moderator.guard';
+import { ModeratorOrAdminGuard } from '../guards/moderator-or-admin.guard';
 
 @ApiTags('admin / exams')
 @Controller('admin/exams')
-@UseGuards(JwtAuthGuard, AdminGuard)
 @ApiBearerAuth('jwt')
 export class ExamsController {
   constructor(private examsService: ExamsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
     summary: 'Create a new exam (Admin only)',
     description: `
@@ -223,6 +224,7 @@ export class ExamsController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
     summary: 'Get all exams (SuperAdmin only)',
     description: `
@@ -249,6 +251,7 @@ export class ExamsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
     summary: 'Get a specific exam by ID (SuperAdmin only)',
     description: `
@@ -278,6 +281,7 @@ export class ExamsController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
     summary: 'Update an existing exam (SuperAdmin only)',
     description: `
@@ -331,6 +335,7 @@ export class ExamsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({
     summary: 'Delete an exam (SuperAdmin only)',
     description: `
@@ -366,7 +371,7 @@ export class ExamsController {
   }
 
   @Patch(':id/toggle-active')
-  @UseGuards(JwtAuthGuard, ModeratorGuard)
+  @UseGuards(JwtAuthGuard, ModeratorOrAdminGuard)
   @ApiBearerAuth('jwt')
   @ApiOperation({
     summary: 'Toggle exam active status (Moderator/Admin only)',

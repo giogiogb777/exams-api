@@ -30,8 +30,11 @@ export class ExamsService {
         throw new BadRequestException(`Question ${index + 1}: point must be a positive number`);
       }
 
-      // Validate based on category
-      if (question.category === QuestionCategoryEnum.TRUE_FALSE) {
+      // Validate based on category (support both numeric enum and string values)
+      const isTrueFalse = question.category === QuestionCategoryEnum.TRUE_FALSE || 
+                          (question.category as any) === 'true_false';
+      
+      if (isTrueFalse) {
         // For true/false, correctAnswer must be boolean
         if (typeof question.correctAnswer !== 'boolean') {
           throw new BadRequestException(
@@ -75,7 +78,7 @@ export class ExamsService {
         });
 
         // correctAnswer should not be provided for non-true/false categories
-        if (typeof question.correctAnswer === 'boolean') {
+        if (question.correctAnswer !== undefined) {
           throw new BadRequestException(
             `Question ${index + 1}: correctAnswer should not be provided for ${question.category} category`,
           );
@@ -157,12 +160,18 @@ export class ExamsService {
       throw new BadRequestException(`Exam with ID ${id} not found`);
     }
 
-    exam.isActive = !exam.isActive;
+    console.log('Before toggle - exam.isActive:', exam.isActive, 'type:', typeof exam.isActive);
+    // Toggle between 1 and 0
+    exam.isActive = exam.isActive ? false : true;
+    console.log('After toggle - exam.isActive:', exam.isActive, 'type:', typeof exam.isActive);
+    
     const updatedExam = await this.examsRepository.save(exam);
+    console.log('After save - updatedExam.isActive:', updatedExam.isActive, 'type:', typeof updatedExam.isActive);
+    
     return {
       message: 'Exam active status toggled',
       id: updatedExam.id,
-      isActive: updatedExam.isActive,
+      isActive: !!updatedExam.isActive, // Convert to boolean for response
     };
   }
 }

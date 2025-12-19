@@ -40,7 +40,7 @@ export class TestsController {
     `,
   })
   @ApiQuery({
-    name: 'active',
+    name: 'isActive',
     required: false,
     type: Boolean,
     description:
@@ -80,8 +80,10 @@ export class TestsController {
     status: 401,
     description: 'Unauthorized - missing or invalid JWT token',
   })
-  async getAllTests(@Query('active') active?: string): Promise<TestSummaryDto[]> {
-    const activeFlag = active === 'true' ? true : active === 'false' ? false : undefined;
+  async getAllTests(@Query('isActive') isActive?: string): Promise<TestSummaryDto[]> {
+    console.log('Controller received isActive query param:', isActive);
+    const activeFlag = isActive === 'true' ? true : isActive === 'false' ? false : undefined;
+    console.log('Converted to activeFlag:', activeFlag);
     return this.testsService.getAllTests(activeFlag);
   }
 
