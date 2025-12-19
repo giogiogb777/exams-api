@@ -9,6 +9,18 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
+  // Enable CORS
+  app.enableCors({
+    origin: [
+      'http://localhost:4200', // Angular frontend
+      'http://localhost:3000', // Local API
+      /https:\/\/.*\.railway\.app$/, // Railway deployment
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+
   // Swagger configuration
   const config = new DocumentBuilder()
     .setTitle('IT Academy Tests API')
